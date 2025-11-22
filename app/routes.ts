@@ -13,4 +13,6 @@ export default [
 
   route("test/score", "modules/catalog/pages/ScoreTestPage.tsx"),
 
+  route("tools/metronome", "modules/tools/pages/MetronomePage.tsx"),
+
 ] satisfies RouteConfig;
