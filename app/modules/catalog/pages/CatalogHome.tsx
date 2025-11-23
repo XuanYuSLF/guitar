@@ -9,11 +9,12 @@ import {
   IconButton,
   Stack,
   useTheme,
-  alpha
+  // alpha // 暂时没用到，可以去掉
 } from '@mui/material';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import TimerIcon from '@mui/icons-material/Timer'; 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'; 
+import QueueMusicIcon from '@mui/icons-material/QueueMusic'; // ✅ 新增图标
 import { Link } from 'react-router'; 
 import { useQuery } from '@tanstack/react-query';
 import { lessonService } from '@/api/lesson.service';
@@ -25,6 +26,17 @@ export default function CatalogHome() {
     queryKey: ['lessons'],
     queryFn: lessonService.getAllLessons
   });
+
+  // 定义顶部工具按钮的通用样式，保持一致性
+  const toolBtnSx = {
+    bgcolor: '#2A2A30',
+    color: 'rgba(255,255,255,0.8)',
+    borderRadius: '18px', // 方圆形
+    width: 56,
+    height: 56,
+    transition: 'all 0.2s',
+    '&:hover': { bgcolor: '#3A3A40', transform: 'translateY(-2px)' }
+  };
 
   if (isLoading) return <Box sx={{display:'flex', justifyContent:'center', mt: 10}}><CircularProgress color="secondary" /></Box>;
   if (error) return <Typography color="error" sx={{textAlign:'center', mt: 4}}>无法加载课程数据</Typography>;
@@ -56,28 +68,41 @@ export default function CatalogHome() {
           </Typography>
         </Box>
 
-        <Box sx={{ textAlign: 'center' }}>
-          <IconButton 
-            component={Link} 
-            to="/tools/metronome"
-            sx={{ 
-              bgcolor: '#2A2A30',
-              color: 'rgba(255,255,255,0.8)',
-              borderRadius: '18px', // 方圆形
-              width: 56,
-              height: 56,
-              transition: 'all 0.2s',
-              '&:hover': { bgcolor: '#3A3A40', transform: 'translateY(-2px)' }
-            }}
-          >
-            <TimerIcon />
-          </IconButton>
-          <Typography variant="caption" display="block" sx={{ mt: 0.8, color: 'rgba(255,255,255,0.4)' }}>
-            节拍器
-          </Typography>
-        </Box>
+        {/* 右侧工具栏 Stack */}
+        <Stack direction="row" spacing={2}>
+          
+          {/* ✅ 新增：乐谱测试入口 */}
+          <Box sx={{ textAlign: 'center' }}>
+            <IconButton 
+              component={Link} 
+              to="/test/score"
+              sx={toolBtnSx}
+            >
+              <QueueMusicIcon />
+            </IconButton>
+            <Typography variant="caption" display="block" sx={{ mt: 0.8, color: 'rgba(255,255,255,0.4)' }}>
+              乐谱测试
+            </Typography>
+          </Box>
+
+          {/* 节拍器入口 */}
+          <Box sx={{ textAlign: 'center' }}>
+            <IconButton 
+              component={Link} 
+              to="/tools/metronome"
+              sx={toolBtnSx}
+            >
+              <TimerIcon />
+            </IconButton>
+            <Typography variant="caption" display="block" sx={{ mt: 0.8, color: 'rgba(255,255,255,0.4)' }}>
+              节拍器
+            </Typography>
+          </Box>
+
+        </Stack>
       </Stack>
 
+              
       {/* --- 课程列表 (胶囊风格) --- */}
       <Stack spacing={2.5}>
         {lessons?.map((lesson) => (
