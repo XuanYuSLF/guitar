@@ -6,6 +6,16 @@ import { useAlphaTabTheme } from '../hooks/useAlphaTabTheme';
 import { ScoreTopBar } from './ScoreTopBar';
 import { ScoreScrollbar } from './ScoreScrollbar';
 
+const BASE_URL = import.meta.env.BASE_URL;
+
+/**
+ * 路径拼接辅助函数
+ */
+const asset = (path: string) => {
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${BASE_URL}${cleanPath}`;
+};
+
 export interface ScoreViewerProps {
   source: { type: 'tex'; content: string } | { type: 'file'; url: string };
   trackIndex?: number;
@@ -77,13 +87,13 @@ export const ScoreViewer: React.FC<ScoreViewerProps> = ({
     if (!element || !scrollElement) return;
 
     const settings: any = {
-      core: { fontDirectory: '/assets/font/', useWorkers: false },
+      core: { fontDirectory: asset('/assets/font/'), useWorkers: true },
       player: {
         enablePlayer: true,
         enableUserInteraction: true,
         enableCursor: true,     // 开启 Bar Cursor (框框)
         enableBeatCursor: true, // 开启 Beat Cursor (线)
-        soundFont: '/assets/soundfont/sonivox.sf2',
+        soundFont: asset('/assets/soundfont/sonivox.sf2'),
         scrollElement: scrollElement, 
         scrollOffsetY: 0,
         scrollOffsetX: 0
