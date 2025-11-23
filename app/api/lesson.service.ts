@@ -143,7 +143,7 @@ const MOCK_LESSONS: Lesson[] = [
       title: "Blues Rock Tune",
       tempo: 120,
       audioSrc: asset("audio/blues_rock.mp3"),
-      gpFile: asset("tabs/blues_rock.gp5")
+      gpFile: asset("tabs/blues_rock_tune.gpx")
     }
   }
 ];
