@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 
 
-const REPO_NAME = "/guitar/"; 
+const REPO_NAME = "/"; 
 
 export default defineConfig({
   base: process.env.NODE_ENV === "production" ? REPO_NAME : "/",
