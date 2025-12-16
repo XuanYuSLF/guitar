@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // ⚠️ 把这里改成你的 GitHub 仓库名，前后都要加斜杠
 // 如果仓库名是 blues-guitar-app，就是 /blues-guitar-app/
-const REPO_NAME = "/guitar/"; 
+const REPO_NAME = "/"; 
 
 export default defineConfig({
   base: process.env.NODE_ENV === "production" ? REPO_NAME : "/",
