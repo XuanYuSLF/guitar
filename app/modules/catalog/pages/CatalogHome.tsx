@@ -8,34 +8,38 @@ import {
   CircularProgress, 
   IconButton,
   Stack,
-  useTheme,
-  // alpha // 暂时没用到，可以去掉
 } from '@mui/material';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import TimerIcon from '@mui/icons-material/Timer'; 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'; 
-import QueueMusicIcon from '@mui/icons-material/QueueMusic'; // ✅ 新增图标
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Link } from 'react-router'; 
 import { useQuery } from '@tanstack/react-query';
 import { lessonService } from '@/api/lesson.service';
+import { colors } from '@/config/theme';
+import type { DifficultyLevel } from '@/types';
+
+const difficultyConfig: Record<DifficultyLevel, { label: string; color: string }> = {
+  beginner: { label: '入门', color: '#4CAF50' },
+  intermediate: { label: '进阶', color: '#FF9800' },
+  advanced: { label: '高级', color: '#F44336' },
+};
 
 export default function CatalogHome() {
-  const theme = useTheme();
-  
   const { data: lessons, isLoading, error } = useQuery({
     queryKey: ['lessons'],
     queryFn: lessonService.getAllLessons
   });
 
-  // 定义顶部工具按钮的通用样式，保持一致性
   const toolBtnSx = {
-    bgcolor: '#2A2A30',
+    bgcolor: colors.bgElevated,
     color: 'rgba(255,255,255,0.8)',
-    borderRadius: '18px', // 方圆形
+    borderRadius: '18px',
     width: 56,
     height: 56,
     transition: 'all 0.2s',
-    '&:hover': { bgcolor: '#3A3A40', transform: 'translateY(-2px)' }
+    '&:hover': { bgcolor: colors.bgHover, transform: 'translateY(-2px)' }
   };
 
   if (isLoading) return <Box sx={{display:'flex', justifyContent:'center', mt: 10}}><CircularProgress color="secondary" /></Box>;
@@ -110,10 +114,9 @@ export default function CatalogHome() {
             key={lesson.id}
             elevation={0}
             sx={{ 
-              // 关键点：胶囊大圆角
               borderRadius: '50px', 
-              bgcolor: '#18181B', // 极深背景
-              overflow: 'hidden', // 确保左侧色块不溢出
+              bgcolor: colors.bgDeep,
+              overflow: 'hidden',
               transition: 'transform 0.2s ease',
               '&:hover': {
                 transform: 'scale(1.02)',
@@ -135,14 +138,13 @@ export default function CatalogHome() {
               
               {/* 1. 左侧紫色半圆块 */}
               <Box sx={{ 
-                width: { xs: 85, sm: 110 }, // 手机上稍微窄一点
+                width: { xs: 85, sm: 110 },
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                // 截图里的深紫色
-                bgcolor: '#3B2968', 
+                bgcolor: colors.highlight, 
                 color: '#fff',
-                flexShrink: 0 // 防止被挤压
+                flexShrink: 0
               }}>
                 <LibraryMusicIcon sx={{ fontSize: { xs: 28, sm: 32 }, opacity: 0.9 }} />
               </Box>
@@ -173,7 +175,7 @@ export default function CatalogHome() {
                   variant="body2" 
                   sx={{ 
                     color: 'rgba(255,255,255,0.5)', 
-                    mb: 1.5, 
+                    mb: 1, 
                     fontSize: '0.85rem',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
@@ -183,10 +185,34 @@ export default function CatalogHome() {
                   {lesson.subtitle}
                 </Typography>
 
-                {/* 标签区：关键修复 flexWrap */}
+                {/* 元数据：难度和时长 */}
+                {lesson.meta && (
+                  <Stack direction="row" spacing={1.5} sx={{ mb: 1 }}>
+                    <Chip
+                      label={difficultyConfig[lesson.meta.difficulty].label}
+                      size="small"
+                      sx={{
+                        height: 20,
+                        fontSize: '0.65rem',
+                        fontWeight: 600,
+                        bgcolor: difficultyConfig[lesson.meta.difficulty].color,
+                        color: '#fff',
+                        '& .MuiChip-label': { px: 1 }
+                      }}
+                    />
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.3 }}>
+                      <AccessTimeIcon sx={{ fontSize: 14, color: 'rgba(255,255,255,0.4)' }} />
+                      <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)' }}>
+                        {lesson.meta.duration}分钟
+                      </Typography>
+                    </Box>
+                  </Stack>
+                )}
+
+                {/* 标签区 */}
                 <Box sx={{ 
                   display: 'flex', 
-                  flexWrap: 'wrap', // ✅ 允许换行，解决截图截断问题
+                  flexWrap: 'wrap',
                   gap: 0.8 
                 }}>
                   {lesson.tags.map(tag => (
@@ -198,7 +224,7 @@ export default function CatalogHome() {
                         height: 22,
                         fontSize: '0.7rem',
                         fontWeight: 500,
-                        bgcolor: '#2D2D35', // 深灰标签背景
+                        bgcolor: colors.bgInput,
                         color: '#A0A0AB',
                         border: 'none',
                         '& .MuiChip-label': { px: 1.2 }

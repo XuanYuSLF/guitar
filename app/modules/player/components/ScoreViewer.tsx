@@ -5,16 +5,7 @@ import * as alphaTab from '@coderline/alphatab';
 import { useAlphaTabTheme } from '../hooks/useAlphaTabTheme';
 import { ScoreTopBar } from './ScoreTopBar';
 import { ScoreScrollbar } from './ScoreScrollbar';
-
-const BASE_URL = import.meta.env.BASE_URL;
-
-/**
- * 路径拼接辅助函数
- */
-const asset = (path: string) => {
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${BASE_URL}${cleanPath}`;
-};
+import { asset } from '@/utils/path';
 
 export interface ScoreViewerProps {
   source: { type: 'tex'; content: string } | { type: 'file'; url: string };
