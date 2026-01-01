@@ -14,11 +14,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          "vendor-mui": ["@mui/material", "@mui/icons-material", "@emotion/react", "@emotion/styled"],
-          "vendor-react": ["react", "react-dom", "react-router"],
-          "vendor-query": ["@tanstack/react-query", "zustand"],
-        },
+        // manualChunks removed to avoid conflict with server build externals
       },
     },
     sourcemap: false,
